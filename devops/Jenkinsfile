@@ -35,18 +35,22 @@ pipeline {
         }
         stage('Build & Tag Docker Image') {
             steps {
-                script{
-                    withDockerRegistry(credentialsId: 'docker', toolName: 'docker'){
-                        sh "docker build -t fredamoako/devops-lab4:latest ."
+                dir('devops'){
+                    script{
+                        withDockerRegistry(credentialsId: 'docker', toolName: 'docker'){
+                            sh "docker build -t fredamoako/devops-lab4:latest ."
+                        }
                     }
                 }
             }
         }
         stage('Push Docker Image') {
             steps {
-                script{
-                    withDockerRegistry(credentialsId: 'docker', toolName: 'docker'){
-                        sh "docker push fredamoako/devops:latest"
+                dir('devops'){
+                    script{
+                        withDockerRegistry(credentialsId: 'docker', toolName: 'docker'){
+                            sh "docker push fredamoako/devops-lab4:latest"
+                        }
                     }
                 }
             }
