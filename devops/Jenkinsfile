@@ -1,0 +1,55 @@
+pipeline {
+    agent any
+
+    tools{
+        jdk 'jdk'
+        maven 'maven3'
+    }
+    stages {
+        stage('Git Checkout') {
+            steps {
+                git branch: 'master', url: 'https://github.com/amt-fredrick-amoako/IL-Lab-4'
+            }
+        }
+        stage('Compile') {
+            steps{
+            dir('devops'){
+                sh "mvn compile"
+            }
+            }
+
+        }
+        stage('Test') {
+            steps {
+                dir('devops'){
+                    sh "mvn test"
+                }
+            }
+        }
+        stage('Build') {
+            steps {
+                dir('devops'){
+                    sh "mvn package"
+                }
+            }
+        }
+        stage('Build & Tag Docker Image') {
+            steps {
+                script{
+                    withDockerRegistry(credentialsId: 'docker', toolName: 'docker'){
+                        sh "docker build -t fredamoako/devops-lab4:latest ."
+                    }
+                }
+            }
+        }
+        stage('Push Docker Image') {
+            steps {
+                script{
+                    withDockerRegistry(credentialsId: 'docker', toolName: 'docker'){
+                        sh "docker push fredamoako/devops:latest"
+                    }
+                }
+            }
+        }
+    }
+}
