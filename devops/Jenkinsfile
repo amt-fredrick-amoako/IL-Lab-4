@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage('Git Checkout') {
             steps {
-                git branch: 'master', url: 'https://github.com/amt-fredrick-amoako/IL-Lab-4'
+                git branch: 'main', url: 'https://github.com/amt-fredrick-amoako/IL-Lab-4'
             }
         }
         stage('Compile') {
