@@ -1,54 +1,59 @@
 pipeline {
     agent any
 
-    tools{
+    tools {
         jdk 'jdk'
         maven 'maven3'
     }
+
     stages {
         stage('Git Checkout') {
             steps {
                 git branch: 'main', url: 'https://github.com/amt-fredrick-amoako/IL-Lab-4'
             }
         }
-        stage('Compile') {
-            steps{
-            dir('devops'){
-                sh "mvn compile"
-            }
-            }
 
+        stage('Compile') {
+            steps {
+                dir('devops') {
+                    sh "mvn compile"
+                }
+            }
         }
+
         stage('Test') {
             steps {
-                dir('devops'){
+                dir('devops') {
                     sh "mvn test"
                 }
             }
         }
+
         stage('Build') {
             steps {
-                dir('devops'){
+                dir('devops') {
                     sh "mvn package"
                 }
             }
         }
-        stage('Build & Tag Docker Image') {
+
+        stage('Build & Tag Image with Spring Boot Plugin') {
             steps {
-                dir('devops'){
-                    script{
-                        withDockerRegistry(credentialsId: 'docker', toolName: 'docker'){
-                            sh "docker build -t fredamoako/devops-lab4:latest ."
+                dir('devops') {
+                    script {
+                        withDockerRegistry(credentialsId: 'docker', toolName: 'docker') {
+                            sh "mvn spring-boot:build-image -Dspring-boot.build-image.imageName=fredamoako/devops-lab4:latest"
                         }
                     }
                 }
             }
         }
-        stage('Push Docker Image') {
+
+        stage('Push Image') {
             steps {
-                dir('devops'){
-                    script{
-                        withDockerRegistry(credentialsId: 'docker', toolName: 'docker'){
+                dir('devops') {
+                    script {
+                        withDockerRegistry(credentialsId: 'docker', toolName: 'docker') {
                             sh "docker push fredamoako/devops-lab4:latest"
                         }
                     }
