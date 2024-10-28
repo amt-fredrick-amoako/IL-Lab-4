@@ -8,16 +8,19 @@ import static com.amalitech.UserGenerator.generateUser;
  */
 public class App 
 {
-    private static final MovieQuoteService movieQuoteService = new MovieQuoteService();
+//    private static final MovieQuoteService movieQuoteService = new MovieQuoteService();
+    private static final MovieQuoteOptimized movieQuoteOptimized = new MovieQuoteOptimized();
     static{
-        movieQuoteService.start();
+//        movieQuoteService.start();
+        movieQuoteOptimized.start();
     }
     public static void main( String[] args )
     {
         while(true){
             User user = generateUser();
             System.out.println(user.getFullName() + " logged in");
-            user.subscribe(movieQuoteService);
+//            user.subscribe(movieQuoteService);
+            user.subscribe(movieQuoteOptimized);
             userUsingService();
             System.out.println(user.getFullName() + " logged out");
         }

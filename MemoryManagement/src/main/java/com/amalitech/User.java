@@ -8,6 +8,7 @@ public class User implements Observer{
     private String city;
     private String state;
     private String zipCode;
+    private int notificationCount;
 
     public User(String fullName, String emailAddress, String cellPhone, String streetAddress, String city, String state, String zipCode) {
         this.fullName = fullName;
@@ -78,6 +79,7 @@ public class User implements Observer{
     @Override
     public void update(final String quote) {
         // user got updated with a new quote
+        notificationCount++;
     }
 
     @Override
@@ -88,6 +90,11 @@ public class User implements Observer{
     @Override
     public void unsubscribe(final Subject subject) {
         subject.detach(this);
+    }
+
+    @Override
+    public int getNotificationCount() {
+        return notificationCount;
     }
 
     @Override
